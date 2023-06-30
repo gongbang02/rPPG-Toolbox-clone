@@ -4,7 +4,7 @@ TRAIN:
   BATCH_SIZE: 32
   EPOCHS: 10
   LR: 9e-3
-  MODEL_FILE_NAME: MMPD_MMPD_UBFC_seq_rppg
+  MODEL_FILE_NAME: MMPD_MMPD_UBFC_Seq_rPPG
   DATA:
     INFO:
       LIGHT: [1, 2, 3]  # 1 - LED-Low, 2 - LED-high, 3 - Incandescent, 4 - Nature
@@ -111,9 +111,7 @@ LOG:
   PATH: runs/exp
 MODEL:
   DROP_RATE: 0.2
-  NAME: Tscan
-  TSCAN:
-    FRAME_DEPTH: 10
+  NAME: SeqrPPG
 INFERENCE:
   BATCH_SIZE: 4
   EVALUATION_METHOD: "FFT"        # "FFT" or "peak detection"

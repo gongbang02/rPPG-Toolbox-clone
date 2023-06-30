@@ -14,13 +14,12 @@ from neural_methods.trainer.BaseTrainer import BaseTrainer
 from tqdm import tqdm
 
 
-class TscanTrainer(BaseTrainer):
+class SeqrPPGTrainer(BaseTrainer):
 
     def __init__(self, config, data_loader):
         """Inits parameters from args and the writer for TensorboardX."""
         super().__init__()
         self.device = torch.device(config.DEVICE)
-        self.frame_depth = config.MODEL.TSCAN.FRAME_DEPTH
         self.max_epoch_num = config.TRAIN.EPOCHS
         self.model_dir = config.MODEL.MODEL_DIR
         self.model_file_name = config.TRAIN.MODEL_FILE_NAME
