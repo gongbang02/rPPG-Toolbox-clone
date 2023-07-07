@@ -75,7 +75,7 @@ class Seq_rPPG(nn.Module):
         self.w = {}
 
     def forward(self, x):
-        x = (x - torch.reshape(torch.mean(x, dim=(1, 2, 3)), (-1, 1, 1, 1, 3)))/torch.reshape(torch.std(x, dim=(1, 2, 3)), (-1, 1, 1, 1, 3))
+        x = (x - torch.reshape(torch.mean(x, dim=(1, 2, 3)), (-1, 1, 1, 1))) / torch.reshape(torch.std(x, dim=(1, 2, 3)), (-1, 1, 1, 1))
         x = torch.transpose(x, (0, 1, 4, 2, 3))
         x = self.a(x)
         x = self.ST1(x)
