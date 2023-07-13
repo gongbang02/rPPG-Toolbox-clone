@@ -29,7 +29,7 @@ class SpectralTransform(nn.Module):
     def __init__(self, c, size=3):
         super(SpectralTransform, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv1d(in_channels=c*2, out_channels=c*2, kernel_size=size, stride=1, padding=size//2),
+            nn.Conv1d(in_channels=c, out_channels=c*2, kernel_size=size, stride=1, padding=size//2),
             nn.BatchNorm1d(c*2),
             nn.ReLU()
         )
@@ -53,8 +53,8 @@ class Seq_rPPG(nn.Module):
     def __init__(self):
         super(Seq_rPPG, self).__init__()
         self.a = nn.Sequential(
-            nn.Flatten(start_dim=1, end_dim=-1),
-            nn.Conv1d(in_channels=64, out_channels=64, kernel_size=3, stride=3)
+            nn.Flatten(),
+            nn.Conv1d(in_channels=1, out_channels=64, kernel_size=3, stride=3)
         )
         self.ST1 = SpectralTransform(64, 5)
         self.conv1_1 = nn.Conv1d(in_channels=64, out_channels=64, kernel_size=10, stride=1, padding=10//2)
@@ -76,7 +76,7 @@ class Seq_rPPG(nn.Module):
 
     def forward(self, x):
         x = (x - torch.reshape(torch.mean(x, dim=(1, 2, 3)), (-1, 1, 1, 1))) / torch.reshape(torch.std(x, dim=(1, 2, 3)), (-1, 1, 1, 1))
-        x = x.permute(0, 3, 1, 2)
+        x = x.permute(0, 1, 4, 2, 3)
         x = self.a(x)
         x = self.ST1(x)
         x = self.conv1_1(x)
