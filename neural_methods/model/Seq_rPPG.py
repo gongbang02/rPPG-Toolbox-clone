@@ -2,27 +2,6 @@ import torch
 import torch.nn as nn
 import torch.fft as fft
 
-"""
-import tensorflow as tf
-for i in tf.config.experimental.list_physical_devices('GPU'):
-    tf.config.experimental.set_memory_growth(i,True)
-from tensorflow import keras
-import keras.backend as K
-from tensorflow.keras import layers
-from tensorflow.python.profiler.model_analyzer import profile
-from tensorflow.python.profiler.option_builder import ProfileOptionBuilder
-
-def get_flops(model, input_sig=[tf.TensorSpec([1, 450, 8, 8, 3])]):
-    forward_pass = tf.function(
-        model.call,
-        input_signature=input_sig)
-    graph_info = profile(forward_pass.get_concrete_function().graph,
-                            options=ProfileOptionBuilder.float_operation())
-    return graph_info.total_float_ops
-
-def to_tf(datatape, dtype=tf.float16):
-    return tf.data.Dataset.from_generator(lambda :datatape, output_types=(dtype, dtype), output_shapes=(datatape.shape, datatape.shape[:1]))
-"""
 
 class SpectralTransform(nn.Module):
 
@@ -57,19 +36,19 @@ class Seq_rPPG(nn.Module):
             nn.Conv1d(in_channels=1, out_channels=64, kernel_size=3, stride=3)
         )
         self.ST1 = SpectralTransform(64, 5)
-        self.conv1_1 = nn.Conv1d(in_channels=64, out_channels=64, kernel_size=10, stride=1, padding=10//2)
+        self.conv1_1 = nn.Conv1d(in_channels=128, out_channels=64, kernel_size=10, stride=1, padding=10//2)
         self.atv1 = nn.Sequential(
             nn.BatchNorm1d(64), 
             nn.ReLU()
         )
         self.ST2 = SpectralTransform(64, 3)
-        self.conv2 = nn.Conv1d(in_channels=32, out_channels=32, kernel_size=5, stride=1, padding=5//2)
+        self.conv2 = nn.Conv1d(in_channels=128, out_channels=32, kernel_size=5, stride=1, padding=5//2)
         self.atv2 = nn.Sequential(
             nn.BatchNorm1d(32), 
             nn.ReLU()
         )
         self.z = nn.Sequential(
-            nn.Conv1d(in_channels=1, out_channels=1, kernel_size=1, stride=1),
+            nn.Conv1d(in_channels=32, out_channels=1, kernel_size=1, stride=1),
             nn.Flatten(start_dim=0, end_dim=-1)
         )
         self.w = {}
